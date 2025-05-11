@@ -40,13 +40,25 @@ const Category = ({
     >
       <LinearGradient
         colors={gradientColors}
-        className={`rounded-2xl p-5 w-36 h-36 justify-center items-center ${selected ? "border-2 border-white" : ""}`}
+        className={`rounded-2xl p-5 w-36 h-36 justify-center items-center ${selected ? "border-2 border-white shadow-lg shadow-purple-500/50" : ""}`}
+        style={{
+          shadowColor: selected ? gradientColors[0] : "transparent",
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: selected ? 0.5 : 0,
+          shadowRadius: 8,
+          elevation: selected ? 10 : 0,
+        }}
       >
         <View className="items-center">
-          <View className="bg-black/30 p-3 rounded-full mb-3">{icon}</View>
+          <View className="bg-black/30 p-4 rounded-full mb-3 shadow-sm shadow-white/20">
+            {icon}
+          </View>
           <Text className="text-white font-bold text-lg text-center">
             {title}
           </Text>
+          {selected && (
+            <View className="absolute -bottom-1 w-10 h-1 bg-white rounded-full" />
+          )}
         </View>
       </LinearGradient>
     </TouchableOpacity>
@@ -99,15 +111,15 @@ const CategorySelection = ({
   };
 
   return (
-    <View className="bg-gray-900 p-4 rounded-lg">
-      <Text className="text-white text-xl font-bold mb-4">
+    <View className="bg-gray-900/80 p-6 rounded-2xl shadow-lg shadow-black/30 border border-gray-800">
+      <Text className="text-white text-xl font-bold mb-4 ml-1">
         Choose a Category
       </Text>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingRight: 20 }}
-        className="pb-2"
+        contentContainerStyle={{ paddingRight: 20, paddingLeft: 4 }}
+        className="pb-3"
       >
         {categories.map((category) => (
           <Category

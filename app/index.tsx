@@ -1,26 +1,65 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Animated, Easing } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Animated,
+  Easing,
+  ScrollView,
+  Image,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "expo-status-bar";
 import { useRouter } from "expo-router";
 import * as Haptics from "expo-haptics";
-import { Mic, Headphones } from "lucide-react-native";
+import {
+  Mic,
+  Headphones,
+  TrendingUp,
+  Users,
+  Sparkles,
+  ChevronRight,
+} from "lucide-react-native";
 import CategorySelection from "./components/CategorySelection";
 
 export default function HomeScreen() {
   const router = useRouter();
   const [isReady, setIsReady] = useState(false);
+  const [activeUsers, setActiveUsers] = useState(324);
+  const [matchesThisWeek, setMatchesThisWeek] = useState(1289);
 
   // Animation values for the audio wave
   const wave1 = new Animated.Value(0);
   const wave2 = new Animated.Value(0);
   const wave3 = new Animated.Value(0);
   const buttonScale = new Animated.Value(1);
+  const fadeAnim = new Animated.Value(0);
+  const slideAnim = new Animated.Value(50);
 
   // Start animations when component mounts
   useEffect(() => {
     setIsReady(true);
     startWaveAnimations();
+
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 800,
+        useNativeDriver: true,
+      }),
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 800,
+        useNativeDriver: true,
+      }),
+    ]).start();
+
+    // Simulate active users changing
+    const interval = setInterval(() => {
+      setActiveUsers((prev) => prev + Math.floor(Math.random() * 3) - 1);
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, []);
 
   // Function to animate the audio waves
@@ -145,87 +184,166 @@ export default function HomeScreen() {
       style={{ flex: 1, backgroundColor: "#121212" }}
     >
       <StatusBar style="light" />
-      <View className="flex-1 items-center justify-between py-16 px-6">
-        {/* App Header */}
-        <View className="items-center">
-          <Text className="text-4xl font-bold text-white mb-2">VoiceMatch</Text>
-          <Text className="text-gray-400 text-center text-lg mb-4">
-            Connect through conversations,{"\n"}not appearances
-          </Text>
-        </View>
-
-        {/* Audio Wave Animation */}
-        <View className="flex-1 justify-center items-center relative w-full">
+      <ScrollView className="flex-1">
+        <View className="items-center justify-between py-16 px-6">
+          {/* App Header with Stats */}
           <Animated.View
+            className="items-center w-full"
             style={{
-              opacity: wave3Opacity,
-              transform: [{ scale: wave3Scale }],
-              position: "absolute",
+              opacity: fadeAnim,
+              transform: [{ translateY: slideAnim }],
             }}
-            className="w-64 h-64 rounded-full bg-purple-500/20"
-          />
-          <Animated.View
-            style={{
-              opacity: wave2Opacity,
-              transform: [{ scale: wave2Scale }],
-              position: "absolute",
-            }}
-            className="w-52 h-52 rounded-full bg-purple-500/30"
-          />
-          <Animated.View
-            style={{
-              opacity: wave1Opacity,
-              transform: [{ scale: wave1Scale }],
-              position: "absolute",
-            }}
-            className="w-40 h-40 rounded-full bg-purple-500/40"
-          />
-
-          <View className="w-32 h-32 rounded-full bg-purple-600 items-center justify-center z-10">
-            <Mic size={48} color="white" />
-            <Headphones size={24} color="white" className="absolute bottom-6" />
-          </View>
-        </View>
-
-        {/* Category Selection */}
-        <View className="w-full mb-8">
-          <Text className="text-white text-xl mb-4 font-semibold">
-            Choose a category:
-          </Text>
-          <CategorySelection />
-        </View>
-
-        {/* Start Talking Button */}
-        <Animated.View
-          style={{
-            transform: [{ scale: buttonScale }],
-            width: "100%",
-          }}
-        >
-          <TouchableOpacity
-            onPress={handleStartTalking}
-            className="w-full"
-            activeOpacity={0.8}
           >
-            <LinearGradient
-              colors={["#8a2be2", "#9932cc", "#a64dff"]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              className="py-5 px-8 rounded-full items-center"
-            >
-              <Text className="text-white text-xl font-bold">
-                Start Talking
-              </Text>
-            </LinearGradient>
-          </TouchableOpacity>
-        </Animated.View>
+            <Text className="text-4xl font-bold text-white mb-2">
+              VoiceMatch
+            </Text>
+            <Text className="text-gray-400 text-center text-lg mb-6">
+              Connect through conversations,{"\n"}not appearances
+            </Text>
 
-        {/* App Description */}
-        <Text className="text-gray-500 text-center text-sm mt-6">
-          Talk anonymously with others based on shared interests.{"\n"}
-          Profiles are revealed only after mutual matching.
-        </Text>
-      </View>
+            {/* Stats Cards */}
+            <View className="flex-row justify-between w-full mb-8">
+              <View className="bg-gray-800/60 p-4 rounded-xl flex-1 mr-2 border border-purple-900/30">
+                <View className="flex-row items-center mb-1">
+                  <Users size={16} color="#a64dff" />
+                  <Text className="text-purple-400 ml-1 text-sm">
+                    Active Now
+                  </Text>
+                </View>
+                <Text className="text-white text-xl font-bold">
+                  {activeUsers}
+                </Text>
+              </View>
+
+              <View className="bg-gray-800/60 p-4 rounded-xl flex-1 ml-2 border border-purple-900/30">
+                <View className="flex-row items-center mb-1">
+                  <TrendingUp size={16} color="#a64dff" />
+                  <Text className="text-purple-400 ml-1 text-sm">
+                    Weekly Matches
+                  </Text>
+                </View>
+                <Text className="text-white text-xl font-bold">
+                  {matchesThisWeek}
+                </Text>
+              </View>
+            </View>
+          </Animated.View>
+
+          {/* Audio Wave Animation */}
+          <View className="justify-center items-center relative w-full my-4">
+            <Animated.View
+              style={{
+                opacity: wave3Opacity,
+                transform: [{ scale: wave3Scale }],
+                position: "absolute",
+              }}
+              className="w-64 h-64 rounded-full bg-purple-500/20"
+            />
+            <Animated.View
+              style={{
+                opacity: wave2Opacity,
+                transform: [{ scale: wave2Scale }],
+                position: "absolute",
+              }}
+              className="w-52 h-52 rounded-full bg-purple-500/30"
+            />
+            <Animated.View
+              style={{
+                opacity: wave1Opacity,
+                transform: [{ scale: wave1Scale }],
+                position: "absolute",
+              }}
+              className="w-40 h-40 rounded-full bg-purple-500/40"
+            />
+
+            <View className="w-32 h-32 rounded-full bg-purple-600 items-center justify-center z-10">
+              <Mic size={48} color="white" />
+              <Headphones
+                size={24}
+                color="white"
+                className="absolute bottom-6"
+              />
+            </View>
+          </View>
+
+          {/* Featured Matches Section */}
+          <View className="w-full mt-8 mb-4">
+            <View className="flex-row justify-between items-center mb-4">
+              <Text className="text-white text-xl font-semibold">
+                Featured Matches
+              </Text>
+              <TouchableOpacity className="flex-row items-center">
+                <Text className="text-purple-400 mr-1">See all</Text>
+                <ChevronRight size={16} color="#a64dff" />
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              className="mb-6"
+            >
+              {[1, 2, 3, 4].map((item) => (
+                <TouchableOpacity
+                  key={item}
+                  className="mr-4 bg-gray-800 rounded-xl overflow-hidden border border-gray-700 w-40"
+                >
+                  <View className="h-24 bg-purple-900/30 items-center justify-center">
+                    <Sparkles size={32} color="#a64dff" />
+                  </View>
+                  <View className="p-3">
+                    <Text className="text-white font-semibold">
+                      Match #{item}
+                    </Text>
+                    <Text className="text-gray-400 text-xs mt-1">
+                      Travel Stories
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+
+          {/* Category Selection */}
+          <View className="w-full mb-8">
+            <Text className="text-white text-xl mb-4 font-semibold">
+              Choose a category:
+            </Text>
+            <CategorySelection />
+          </View>
+
+          {/* Start Talking Button */}
+          <Animated.View
+            style={{
+              transform: [{ scale: buttonScale }],
+              width: "100%",
+            }}
+          >
+            <TouchableOpacity
+              onPress={handleStartTalking}
+              className="w-full"
+              activeOpacity={0.8}
+            >
+              <LinearGradient
+                colors={["#8a2be2", "#9932cc", "#a64dff"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                className="py-5 px-8 rounded-full items-center"
+              >
+                <Text className="text-white text-xl font-bold">
+                  Start Talking
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </Animated.View>
+
+          {/* App Description */}
+          <Text className="text-gray-500 text-center text-sm mt-6 mb-20">
+            Talk anonymously with others based on shared interests.{"\n"}
+            Profiles are revealed only after mutual matching.
+          </Text>
+        </View>
+      </ScrollView>
     </LinearGradient>
   );
 }
