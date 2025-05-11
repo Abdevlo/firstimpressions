@@ -14,7 +14,7 @@ interface CategoryProps {
   id: string;
   title: string;
   icon: React.ReactNode;
-  gradientColors: string[];
+  gradientColors: readonly [string, string];
   selected?: boolean;
   onSelect?: (id: string) => void;
 }
@@ -71,25 +71,25 @@ const CategorySelection = ({
       id: "deep-talks",
       title: "Deep Talks",
       icon: <Brain size={28} color="#fff" />,
-      gradientColors: ["#4A00E0", "#8E2DE2"],
+      gradientColors: ["#4A00E0", "#8E2DE2"] as const,
     },
     {
       id: "travel-stories",
       title: "Travel Stories",
       icon: <Plane size={28} color="#fff" />,
-      gradientColors: ["#00C6FB", "#005BEA"],
+      gradientColors: ["#00C6FB", "#005BEA"] as const,
     },
     {
       id: "hot-takes",
       title: "Hot Takes",
       icon: <Flame size={28} color="#fff" />,
-      gradientColors: ["#FF416C", "#FF4B2B"],
+      gradientColors: ["#FF416C", "#FF4B2B"] as const,
     },
     {
       id: "random",
       title: "Random",
       icon: <Text className="text-white text-2xl font-bold">?</Text>,
-      gradientColors: ["#4CAF50", "#8BC34A"],
+      gradientColors: ["#4CAF50", "#8BC34A"] as const,
     },
   ];
 

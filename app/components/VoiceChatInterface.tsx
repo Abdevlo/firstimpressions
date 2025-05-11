@@ -225,10 +225,10 @@ const VoiceChatInterface = ({
       {/* Match result overlay */}
       {showMatchResult && (
         <MatchResultOverlay
-          isMatched={true}
+          isMatch={true}
           onClose={handleCloseMatchResult}
           matchedUserName="Anonymous"
-          matchedUserAvatar="https://api.dicebear.com/7.x/avataaars/svg?seed=matchedUser123"
+          matchedUserImage="https://api.dicebear.com/7.x/avataaars/svg?seed=matchedUser123"
         />
       )}
     </View>

@@ -36,13 +36,13 @@ export default function HomeScreen() {
         Animated.timing(wave1, {
           toValue: 1,
           duration: 1500,
-          easing: Easing.inOut(Easing.sine),
+          easing: Easing.inOut(Easing.sin),
           useNativeDriver: true,
         }),
         Animated.timing(wave1, {
           toValue: 0,
           duration: 1500,
-          easing: Easing.inOut(Easing.sine),
+          easing: Easing.inOut(Easing.sin),
           useNativeDriver: true,
         }),
       ]),
@@ -53,13 +53,13 @@ export default function HomeScreen() {
         Animated.timing(wave2, {
           toValue: 1,
           duration: 2000,
-          easing: Easing.inOut(Easing.sine),
+          easing: Easing.inOut(Easing.sin),
           useNativeDriver: true,
         }),
         Animated.timing(wave2, {
           toValue: 0,
           duration: 2000,
-          easing: Easing.inOut(Easing.sine),
+          easing: Easing.inOut(Easing.sin),
           useNativeDriver: true,
         }),
       ]),
@@ -70,13 +70,13 @@ export default function HomeScreen() {
         Animated.timing(wave3, {
           toValue: 1,
           duration: 1800,
-          easing: Easing.inOut(Easing.sine),
+          easing: Easing.inOut(Easing.sin),
           useNativeDriver: true,
         }),
         Animated.timing(wave3, {
           toValue: 0,
           duration: 1800,
-          easing: Easing.inOut(Easing.sine),
+          easing: Easing.inOut(Easing.sin),
           useNativeDriver: true,
         }),
       ]),
